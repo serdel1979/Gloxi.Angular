@@ -1,1 +1,56 @@
-<p>register works!</p>
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="form-signin text-center">
+        <h1 class="h3 mb-3 font-weight-normal">Create an Account</h1>
+
+        @if(errorMessages.length > 0){
+            <div class="alert alert-danger">
+                <ul>
+                   @for (item of errorMessages; track $index) {
+                    <li>{{ item }}</li>
+                   }
+                </ul>
+            </div>
+        } 
+
+        @if(access){
+            <div class="alert alert-success" role="alert">
+                Registration successful.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+
+        <label for="inputNombre" class="sr-only">First Name</label>
+        <input (input)="onInputChange()" type="text" id="inputNombre" formControlName="username" class="form-control mb-3" placeholder="First Name" required autofocus>
+
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input (input)="onInputChange()" type="email" id="inputEmail" formControlName="email" class="form-control mb-3" placeholder="Email address" required>
+
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input (input)="onInputChange()" type="password" id="inputPassword" formControlName="password" class="form-control mb-3" placeholder="Password" required>
+
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox"> I accept the terms and conditions
+            </label>
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit" style="color: white;" [disabled]="registerForm.invalid || isLoading">
+          @if(!isLoading){
+            <span>Register</span>
+          }@else {
+            <span>
+                <div class="spinner-border spinner-border-sm" role="status"></div>
+                Registering...
+            </span>
+          }
+        </button>
+
+        <p class="mt-3">
+            Already have an account?
+            <a href="/login" class="text-primary">Login here</a>
+        </p>
+
+        <p class="mt-5 mb-3 text-muted">&copy; 2025</p>
+    </form>
+</div>

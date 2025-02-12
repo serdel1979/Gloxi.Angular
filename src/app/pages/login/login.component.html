@@ -1,1 +1,42 @@
-<p>login works!</p>
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="form-signin text-center">
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+
+        @if(errorMessages.length > 0){
+            <div class="alert alert-danger">
+                <ul>
+                   @for (item of errorMessages; track $index) {
+                    <li>{{ item }}</li>
+                   }
+                </ul>
+            </div>
+        } 
+
+        <label for="inputEmail" class="sr-only">Email address</label>
+        <input (input)="onInputChange()" type="email" formControlName="email" class="form-control mb-3" placeholder="Email address" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input (input)="onInputChange()" type="password" formControlName="password" class="form-control mb-3" placeholder="Password" required>
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" value="remember-me"> Remember me
+            </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" style="color: white;" [disabled]="loginForm.invalid || isLoading">
+            @if(!isLoading){
+              <span>Signin</span>
+            }@else {
+              <span>
+                  <div class="spinner-border spinner-border-sm" role="status"></div>
+                  Signin...
+              </span>
+            }
+          </button>
+
+        <p class="mt-3">
+            Don't have an account?  
+            <a href="/register" class="text-primary">Sign up here</a>
+          </p>
+          
+        <p class="mt-5 mb-3 text-muted">&copy; 2025</p>
+    </form>
+</div>
