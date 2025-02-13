@@ -4,6 +4,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { MainComponent } from './pages/main/main.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
+import { HomeComponent } from './pages/home/home.component';
 
 export const routes: Routes = [
   {
@@ -11,6 +12,7 @@ export const routes: Routes = [
     component: MainLayoutComponent,
     children: [
       { path: 'main', component: MainComponent },
+      { path: 'home', component: HomeComponent},
       { path: '', redirectTo: 'main', pathMatch: 'full' } 
     ]
   },

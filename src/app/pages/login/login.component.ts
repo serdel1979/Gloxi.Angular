@@ -42,7 +42,7 @@ export class LoginComponent implements OnInit{
     this.authService.login(username, password).subscribe({
       next: (response) => {
         this.isLoading = false;
-        this.router.navigate(['/main']);
+        this.router.navigate(['/home']);
         this.loginForm.reset();
       },
       error: (errorResponse) => {
