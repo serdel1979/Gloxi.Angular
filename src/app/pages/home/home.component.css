@@ -1,0 +1,19 @@
+/* Estilos para el sidebar en pantallas medianas y grandes */
+@media (min-width: 768px) {
+    .sidebar {
+        display: block;
+    }
+    .navbar {
+        display: none;
+    }
+}
+
+/* Estilos para el navbar en pantallas pequeñas */
+@media (max-width: 767px) {
+    .sidebar {
+        display: none;
+    }
+    .navbar {
+        display: block;
+    }
+}

@@ -1,24 +1,25 @@
 import { Component } from '@angular/core';
 import { NavBarComponent } from "../../shared/nav-bar/nav-bar.component";
 import { SidebarComponent } from "../../shared/sidebar/sidebar.component";
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [NgClass],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
   menu = [
-    { nombre: 'Rango de precios', url: '#' },
-    { nombre: 'Idioma', url: '#' },
-    { nombre: 'Valoraciones', url: '#' },
-    { nombre: 'Verificación de Gloxi', url: '#' },
-    { nombre: 'Atención personalizada', url: '#' },
-    { nombre: 'Directos', url: '#' },
-    { nombre: 'Duración', url: '#' },
-    { nombre: 'Infoproductos que más te gusta', url: '#' },
+    { nombre: 'Rango de precios', url: '#', active: true },
+    { nombre: 'Idioma', url: '#', active: true },
+    { nombre: 'Valoraciones', url: '#' , active: true},
+    { nombre: 'Verificación de Gloxi', url: '#', active: true },
+    { nombre: 'Atención personalizada', url: '#', active: true },
+    { nombre: 'Directos', url: '#', active: true },
+    { nombre: 'Duración', url: '#', active: true },
+    { nombre: 'Infoproductos que más te gusta', url: '#' , active: true},
   ];
   infoproductos = [
     { id: 1, titulo: 'Producto 1', descripcion: 'Descripción del Producto 1', imagen: '' },
@@ -31,4 +32,5 @@ export class HomeComponent {
     { id: 8, titulo: 'Producto 8', descripcion: 'Descripción del Producto 8', imagen: '' },
     { id: 9, titulo: 'Producto 9', descripcion: 'Descripción del Producto 9', imagen: '' },
   ];
+isCollapsed: any;
 }
