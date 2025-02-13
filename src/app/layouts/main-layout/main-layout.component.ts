@@ -10,5 +10,5 @@ import { NavBarComponent } from "../../shared/nav-bar/nav-bar.component";
   styleUrl: './main-layout.component.css'
 })
 export class MainLayoutComponent {
-
+  anioActual = new Date().getFullYear();
 }

@@ -9,5 +9,5 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './auth-layout.component.css'
 })
 export class AuthLayoutComponent {
-
+  anioActual = new Date().getFullYear();
 }
