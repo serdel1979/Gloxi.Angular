@@ -17,3 +17,21 @@
         display: block;
     }
 }
+
+
+.image-container {
+    width: 100%;
+    padding-top: 100%; /* Hace el contenedor cuadrado */
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80%;
+    height: 80%;
+    object-fit: cover;
+  }
+  

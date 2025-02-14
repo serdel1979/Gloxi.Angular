@@ -1,25 +1,40 @@
 <nav class="navbar navbar-expand-lg bg-white">
     <div class="container-fluid">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03"
-            aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03"
+        aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <img src="/images/logo.png" width="120" alt="logo icon" [routerLink]="['/main']" style="cursor: pointer;">
+  
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <!-- Íconos a la izquierda -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active" href="#"><i class="fas fa-camera"></i></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#"><i class="fas fa-bell"></i></a>
+          </li>
+        </ul>
+  
 
-        <img src="/images/logo.png" width="120" alt="logo icon" [routerLink]="['/home']"  style="cursor: pointer;"   >
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#"><i class="fas fa-camera"></i></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-bell"></i></a>
-                </li>
-            </ul>
-            <a class="nav-link" href="#" style="color: #0fbbe6; margin-right: 15px;">CONVIERTETE EN AFILIADO</a>
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button (click)="login()" class="btn btn-primary" type="submit" style="color: white;">SignIn</button>
-            </form>
+        <div class="d-flex mx-auto" style="max-width: 700px; width: 100%;">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" [(ngModel)]="searchText" (keyup.enter)="buscar()">
         </div>
+          
+  
+        <!-- Afiliado y botones de login/logout -->
+        <div class="d-flex align-items-center">
+            <a class="nav-link" [routerLink]="['/register']" style="color: #0fbbe6; margin-right: 15px;">CONVIÉRTETE EN AFILIADO</a>
+
+            @if(isLoggedIn){
+            <button (click)="login()" class="btn btn-primary me-2" style="color: white;">Login</button>
+            }@else {
+            <button (click)="logout()" class="btn btn-primary" style="color: white;">Logout</button>
+            }
+        </div>
+      </div>
     </div>
-</nav>
+  </nav>
+  
