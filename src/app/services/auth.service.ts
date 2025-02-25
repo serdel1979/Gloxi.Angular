@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { User } from '../interfaces/user';
 import { LoginResponse } from '../interfaces/LoginResponse';
 import { RegisterDto } from '../interfaces/Register';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class AuthService {
     this.getStoredUser()
   );
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http
@@ -63,6 +64,8 @@ export class AuthService {
     localStorage.removeItem('authToken');
     localStorage.removeItem('authUser');
     this.currentUserSubject.next(null);
+  
+    this.router.navigate(['/main']);
   }
 
   private storeLoginResponse(response: LoginResponse): void {

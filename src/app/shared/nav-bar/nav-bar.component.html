@@ -4,9 +4,13 @@
         aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-  
-      <img src="/images/logo.png" width="120" alt="logo icon" [routerLink]="['/main']" style="cursor: pointer;">
-  
+
+      <a [routerLink]="['/main']" style="cursor: pointer;">
+        <img src="/images/logo.png" width="120" alt="logo icon">
+      </a>
+      
+
+   
       <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
         <!-- Íconos a la izquierda -->
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
