@@ -1,0 +1,20 @@
+/* Aseguramos que el contenido principal ocupe toda la altura de la pantalla */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+.row {
+    flex-grow: 1; /* Hace que el contenido ocupe el espacio restante */
+}
+
+/* Aseguramos que el footer tenga espacio y no tape el contenido */
+.footer {
+    margin-top: auto; /* El footer se empuja hacia el final */
+}
