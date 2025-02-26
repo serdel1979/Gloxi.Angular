@@ -6,6 +6,7 @@ import { MainComponent } from './pages/main/main.component';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AuthGuard } from './guards/auth.guard';
+import { InfoProductoComponent } from './component/info-producto/info-producto.component';
 
 export const routes: Routes = [
   {
@@ -14,6 +15,7 @@ export const routes: Routes = [
     children: [
       { path: 'main', component: MainComponent },
       { path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
+      { path: 'infoproduct', component: InfoProductoComponent, canActivate: [AuthGuard]},
       { path: '', redirectTo: 'main', pathMatch: 'full' } 
     ]
   },

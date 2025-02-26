@@ -1,0 +1,16 @@
+<div class="container d-flex justify-content-center align-items-center vh-100 mb-5">
+    <div class="text-center">
+        <h1>Creando infoproducto</h1>
+        <video #videoElement autoplay controls></video>
+        <br>
+        <div class="mt-3">
+            <button class="btn btn-primary" style="color: white; margin-right: 5px;" (click)="startRecording()"><i
+                    class="fas fa-circle"></i></button>
+            <button class="btn btn-primary" style="color: white; margin-right: 5px;" (click)="stopRecording()"> <i
+                    class="fas fa-stop"></i></button>
+            <a #downloadLink style="color: white;" class="btn btn-primary">
+                <i class="fas fa-download"></i> <!-- Ícono de descargar -->
+            </a>
+        </div>
+    </div>
+</div>
