@@ -12,50 +12,46 @@ export class InfoProductoComponent {
   @ViewChild('videoElement') videoElement!: ElementRef<HTMLVideoElement>;
   @ViewChild('downloadLink') downloadLink!: ElementRef<HTMLAnchorElement>;
 
-  mediaRecorder!: MediaRecorder;
-  recordedChunks: Blob[] = [];
-  stream!: MediaStream;
+  mediaRecorder: any;
+  recordedChunks: any[] = [];
+  videoBlobUrl: string | null = null;
 
-  async startRecording() {
-    try {
-      this.stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-      this.videoElement.nativeElement.srcObject = this.stream;
-      this.videoElement.nativeElement.play(); // Inicia la vista previa
-
-      this.mediaRecorder = new MediaRecorder(this.stream);
-      this.mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          this.recordedChunks.push(event.data);
-        }
-      };
-
+  startRecording() {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
+      this.videoElement.nativeElement.srcObject = stream;
+      this.mediaRecorder = new MediaRecorder(stream);
+      this.mediaRecorder.ondataavailable = (event: { data: any; }) => this.recordedChunks.push(event.data);
+      this.mediaRecorder.onstop = () => this.saveRecording();
       this.mediaRecorder.start();
-    } catch (error) {
-      console.error('Error al acceder a la cámara:', error);
-    }
+    });
   }
 
   stopRecording() {
-    this.mediaRecorder.stop();
-    this.mediaRecorder.onstop = () => {
-      const videoBlob = new Blob(this.recordedChunks, { type: 'video/webm' });
-      const videoURL = URL.createObjectURL(videoBlob);
+    if (this.mediaRecorder) {
+      this.mediaRecorder.stop();
+  
+      const stream = this.videoElement.nativeElement.srcObject as MediaStream;
+      if (stream && stream.getTracks) {
+        stream.getTracks().forEach(track => track.stop());
+      }
+  
+      this.videoElement.nativeElement.srcObject = null;
+    }
+  }
+  
 
-      // Cargar el video grabado en el mismo <video>
-      this.videoElement.nativeElement.srcObject = null; // Detener la transmisión en vivo
-      this.videoElement.nativeElement.src = videoURL;
-      this.videoElement.nativeElement.controls = true; // Activar controles de reproducción
+  saveRecording() {
+    const blob = new Blob(this.recordedChunks, { type: 'video/webm' });
+    this.videoBlobUrl = URL.createObjectURL(blob);
+    this.downloadLink.nativeElement.href = this.videoBlobUrl;
+    this.downloadLink.nativeElement.download = 'video.webm';
+  }
 
-      // Preparar el enlace de descarga
-      this.downloadLink.nativeElement.href = videoURL;
-      this.downloadLink.nativeElement.download = 'video.webm';
-
-      // Limpiar la grabación anterior
-      this.recordedChunks = [];
-
-      // Detener la cámara
-      this.stream.getTracks().forEach(track => track.stop());
-    };
+  handleFileInput(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.videoBlobUrl = URL.createObjectURL(file);
+    }
   }
 
 }
