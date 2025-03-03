@@ -1,0 +1,34 @@
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3">
+        <div class="sidebar">
+          <ul class="list-group mt-5">
+            <li class="list-group-item">
+              <button class="btn btn-primary btn-block" style="width: 100%;">Agregar</button>
+            </li>
+            <li class="list-group-item">
+              <button class="btn btn-secondary btn-block" style="width: 100%;">Filtrar</button>
+            </li>
+           
+          </ul>
+        </div>
+      </div>
+  
+      <div class="col-md-9">
+        <div class="row mt-5">
+        @for(infoproducto of infoproductos; track infoproducto){
+          <div class="col-md-4 mb-4">
+            <div class="card">
+
+              <video #videoElement [src]="videoBlobUrl" controls autoplay class="w-100"></video>
+              <div class="card-body">
+                <h5 class="card-title">Título del Infoproducto</h5>
+                <p class="card-text">Descripción del Infoproducto.</p>
+                <p class="card-text">Precio: $99.99</p>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>

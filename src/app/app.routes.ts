@@ -7,7 +7,6 @@ import { MainLayoutComponent } from './layouts/main-layout/main-layout.component
 import { HomeComponent } from './pages/home/home.component';
 import { AuthGuard } from './guards/auth.guard';
 import { InfoProductoComponent } from './component/info-producto/info-producto.component';
-import { CreateinfoproductComponent } from './pages/createinfoproduct/createinfoproduct.component';
 
 export const routes: Routes = [
   {
@@ -16,7 +15,17 @@ export const routes: Routes = [
     children: [
       { path: 'main', component: MainComponent },
       { path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
-      { path: 'infoproduct', component: CreateinfoproductComponent, canActivate: [AuthGuard]},
+      {
+        path: 'infoproducts',
+        loadComponent: () => import('./pages/infoproducts/infoproducts.component').then(c => c.InfoproductsComponent),
+        canActivate: [AuthGuard],
+        children: [
+          { path: 'list', loadComponent: ()=> import('./pages/infoproducts/list-infoproducts/list-infoproducts.component').then(c=> c.ListInfoproductsComponent)  },
+          { path: 'add', loadComponent: () => import('./pages/infoproducts/addinfoproduct/addinfoproduct.component').then(c => c.AddinfoproductComponent) },
+          { path: 'detail/:id', loadComponent: () => import('./pages/infoproducts/datil-infoproduct/datil-infoproduct.component').then(c => c.DatilInfoproductComponent) },
+           { path: '', redirectTo: 'list', pathMatch: 'full' }
+        ]
+      },
       { path: '', redirectTo: 'main', pathMatch: 'full' } 
     ]
   },
