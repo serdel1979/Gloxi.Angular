@@ -23,7 +23,11 @@ export class InfoProductoComponent {
       this.mediaRecorder.ondataavailable = (event: { data: any; }) => this.recordedChunks.push(event.data);
       this.mediaRecorder.onstop = () => this.saveRecording();
       this.mediaRecorder.start();
-    });
+    })
+    .catch(err=>{
+      alert(err);
+    })
+    ;
   }
 
   stopRecording() {

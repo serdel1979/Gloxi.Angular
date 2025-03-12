@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { InfoProductoComponent } from "../../../component/info-producto/info-producto.component";
 import { Infoproducto } from '../../../interfaces/Infoproduct';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-list-infoproducts',
@@ -11,6 +12,11 @@ import { Infoproducto } from '../../../interfaces/Infoproduct';
 })
 export class ListInfoproductsComponent {
   videoBlobUrl: string | null = null;
+
+
+
+
+  constructor(private router: Router){}
 
   infoproductos: Infoproducto[] = [
     {
@@ -68,5 +74,11 @@ export class ListInfoproductsComponent {
       precio: 249.99
     },
   ];
+
+
+
+  addInfoProduct(){
+    this.router.navigate(['/infoproducts/add']);
+  }
 
 }
