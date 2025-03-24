@@ -2,8 +2,15 @@
 
     <h3 class="text-left mb-4">Agregando un infoproducto</h3>
     <div class="row d-flex align-items-start">
-        <div class="col-md-4" style="margin-bottom: 20px;">
-            <div class="card p-3">
+        
+        <!-- Botón de hamburguesa para móviles -->
+        <button class="btn btn-primary d-md-none mb-3" style="color: white;"  (click)="mostrarFormulario = !mostrarFormulario">
+            ☰ Detalle
+        </button>
+
+        <!-- Formulario que se oculta en móviles y se muestra en pantallas grandes -->
+        <div class="col-md-4" [ngClass]="{'d-none': !mostrarFormulario, 'd-md-block': true}" style="margin-bottom: 20px;">
+            <div class="card p-3" style="margin-top: 5px;">
                 <h4 class="mb-3">Información del Producto</h4>
                 <form>
                     <div class="mb-3">
@@ -32,23 +39,67 @@
             </div>
         </div>
 
-        <!-- Video -->
+        <!-- Sección de Video/Listado -->
         <div class="col-md-8">
-            <ul class="nav nav-pills">
+            <ul class="nav nav-pills d-flex flex-wrap justify-content-center justify-content-md-start">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Active</a>
-                    <app-info-producto></app-info-producto>
+                    <a class="nav-link active" #tab1 (click)="selectTap(1)">Listados</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                    <a class="nav-link" #tab2 (click)="selectTap(2)">Archivo</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
+                    <a class="nav-link" #tab3 (click)="selectTap(3)">Video</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                </li>
+              
             </ul>
+        
+            @if(tapActive == 1){
+                <div class="card mt-3 mt-md-0" style="width: 100%;">
+                    <div class="card-body">
+                        <h5 class="card-title">Grupos actuales</h5>
+                        <p class="card-text">Puede seleccionar a qué grupo pertenecerá el infoproducto.</p>
+                        <select class="form-select" size="5" aria-label="Seleccionar grupo">
+                            <option selected>Seleccione un grupo</option>
+                            <option value="1">Programación</option>
+                            <option value="2">Seguridad</option>
+                            <option value="3">Robótica</option>
+                            <option value="4">Curso de electrónica</option>
+                            <option value="5">Tutorial de Bases de datos</option>
+                            <option value="6">Programación concurrente</option>
+                        </select>
+                        <a  class="btn btn-primary mt-2" style="color: white;" (click)="toNext()">Siguiente</a>
+                    </div>
+                </div>   
+            }
+            @if(tapActive == 2){
+                <div class="card mt-3 mt-md-0" style="width: 100%;">
+                    <div class="card-body">
+                        <h5 class="card-title">Seleccionar archivo</h5>
+                        <p class="card-text">Selecciona un archivo a incluir en el infoproducto</p>
+                        
+                        <div class="mb-3">
+                            <label for="formFileDisabled" class="form-label">Disabled file input example</label>
+                            <input class="form-control" type="file" id="formFileDisabled">
+                          </div>
+
+                        <a  class="btn btn-primary mt-2" style="color: white;"  (click)="toNext()">Siguiente</a>
+                    </div>
+                </div>   
+            }
+            @if(tapActive == 3){
+                <div class="card mt-3 mt-md-0" style="width: 100%;">
+                    <div class="card-body">
+                        <h5 class="card-title">Seleccionar video</h5>
+                        <p class="card-text">Puede grabar o subir un video</p>
+                        
+                        <app-info-producto></app-info-producto>
+
+                        <a  class="btn btn-primary mt-2" style="color: white;" (click)="toNext()">Siguiente</a>
+                    </div>
+                </div>   
+            }
         </div>
+        
     </div>
 </div>
