@@ -49,8 +49,14 @@ export class AddinfoproductComponent {
 
   playVideo(video: any) {
     this.selectedVideo = video;
-    this.selectedVideoUrl = URL.createObjectURL(video);
+    if (video.file) {
+      this.selectedVideoUrl = URL.createObjectURL(video.file);  // Usamos el 'file' si está disponible
+    } else {
+      this.selectedVideoUrl = video.url;  // Si no hay 'file', usamos el 'url' que se pasó
+    }
   }
+  
+  
 
   removeVideo(video: any) {
     this.videoList = this.videoList.filter((v) => v !== video);
@@ -78,6 +84,7 @@ export class AddinfoproductComponent {
     if (event.dataTransfer?.files.length) {
       const file = event.dataTransfer.files[0];
       const url = URL.createObjectURL(file);
+      console.log(file);
       this.videoList.push({
         file,
         name: file.name,
@@ -90,23 +97,32 @@ export class AddinfoproductComponent {
     const videoData = event.dataTransfer?.getData("video/mp4");
     if (videoData) {
       const video = JSON.parse(videoData);
+      console.log(video);
       this.videoList.push({
-        file: video.file,
+        file: video.file,       // Ahora pasamos el 'file' correctamente
         name: video.name,
         type: video.type,
         url: video.url
       });
     }
   
-    console.log(this.videoList);
+   // console.log(this.videoList);  // Verifica que los datos sean correctos
   }
+  
+  
   
 
 
     
   onDragStart(event: DragEvent, video: any) {
-    event.dataTransfer?.setData("video/mp4", JSON.stringify(video));
+    event.dataTransfer?.setData("video/mp4", JSON.stringify({
+      file: video.file,    
+      name: video.name,
+      type: video.type,
+      url: video.url
+    }));
   }
+  
 
 
 
