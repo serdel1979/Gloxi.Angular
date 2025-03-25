@@ -1,5 +1,6 @@
 
-<video #videoElement [src]="videoBlobUrl" controls autoplay class="custom-video"></video>
+
+<video #videoElement [src]="videoBlobUrl" controls draggable="true" (dragstart)="onDragStart($event)" autoplay class="custom-video"></video>
 
 <br>
 <div class="m-3">
