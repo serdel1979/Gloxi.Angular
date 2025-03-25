@@ -169,13 +169,15 @@ export class InfoProductoComponent {
   
   onDragStart(event: DragEvent) {
     if (this.videoFile) {
-      console.log('Archivo arrastrado:', this.videoFile);
-      event.dataTransfer?.setData("video/mp4", JSON.stringify({ 
-        file: this.videoFile,
-        name: this.videoFile.name, 
-        type: this.videoFile.type, 
-        url: URL.createObjectURL(this.videoFile)
-      }));
+      const videoFile = new File([this.videoFile], "video-grabado.mp4", { type: "video/mp4" });
+      const videoData = JSON.stringify({
+        file: videoFile,
+        name: "video-grabado.mp4",
+        type: "video/mp4",
+        url: URL.createObjectURL(videoFile) // URL generada desde el Blob
+      });
+      event.dataTransfer?.setData("video/mp4", videoData);
+      console.log("Datos de video enviados en el arrastre:", videoData);
     }
   }
   

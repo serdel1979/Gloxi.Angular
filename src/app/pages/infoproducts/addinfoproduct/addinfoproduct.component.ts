@@ -26,44 +26,48 @@ export class AddinfoproductComponent {
   constructor(private renderer: Renderer2) {}
 
   videoList: any[] = [];
-  
-  videos: { name: string; type: string; url: string }[] = [];
 
+  videos: { name: string; type: string; url: string }[] = [];
 
   selectedVideo: any = null;
   selectedVideoUrl: string = '';
 
   onFileSelected(event: any) {
     const files = event.target.files;
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
+    
+    // Si hay archivos seleccionados
+    if (files.length > 0) {
+      const file = files[0]; // Puedes manejar múltiples archivos si es necesario
+  
+      // Crear una URL de objeto para el archivo
+      const videoUrl = URL.createObjectURL(file);
+      
+      // Agregar el video a la lista de videos
       this.videoList.push({
-        file,
         name: file.name,
-        type: file.type,
-        url: URL.createObjectURL(file),
+        url: videoUrl,
+        file: file,
+        type: file.type
       });
     }
   }
   
 
   playVideo(video: any) {
-    this.selectedVideo = video;
-    if (video.file) {
-      this.selectedVideoUrl = URL.createObjectURL(video.file);  // Usamos el 'file' si está disponible
-    } else {
-      this.selectedVideoUrl = video.url;  // Si no hay 'file', usamos el 'url' que se pasó
-    }
+    const videoElement = document.createElement('video');
+    videoElement.src = video.url;
+    videoElement.controls = true;
+    document.body.appendChild(videoElement);  // Puedes agregarlo en cualquier lugar del DOM
+    videoElement.play();
   }
-  
-  
 
   removeVideo(video: any) {
-    this.videoList = this.videoList.filter((v) => v !== video);
-    if (this.selectedVideo === video) {
-      this.selectedVideo = null;
-      this.selectedVideoUrl = '';
+    // Revocar la URL antes de eliminar el video
+    if (video.url) {
+      URL.revokeObjectURL(video.url);
     }
+
+    this.videoList = this.videoList.filter((v) => v !== video);
   }
 
   // Recibe el video grabado desde <app-info-producto>
@@ -80,51 +84,64 @@ export class AddinfoproductComponent {
   onDrop(event: DragEvent) {
     event.preventDefault();
   
-    // Si se arrastra desde la PC
+    // Si se arrastra un archivo desde la PC
     if (event.dataTransfer?.files.length) {
       const file = event.dataTransfer.files[0];
       const url = URL.createObjectURL(file);
-      console.log(file);
+  
       this.videoList.push({
         file,
         name: file.name,
         type: file.type,
-        url: url
+        url
       });
+      console.log("Archivo agregado desde la PC:", file);
     }
   
-    // Si se arrastra desde app-info-producto
+    // Si se arrastra un video desde `app-info-producto` o el componente de video
     const videoData = event.dataTransfer?.getData("video/mp4");
+    const videoInfo = event.dataTransfer?.getData("video/info");
+  
     if (videoData) {
       const video = JSON.parse(videoData);
-      console.log(video);
       this.videoList.push({
-        file: video.file,       // Ahora pasamos el 'file' correctamente
+        file: video.file,  // Ahora pasamos el 'file' correctamente
         name: video.name,
         type: video.type,
         url: video.url
       });
+      console.log("Archivo agregado desde video-grabado.mp4:", video);
+    } else if (videoInfo) {
+      const video = JSON.parse(videoInfo);
+      this.videoList.push({
+        file: null,  // No tenemos acceso al archivo real, solo al URL
+        name: video.name,
+        type: video.type,
+        url: video.url
+      });
+      console.log("Archivo agregado desde video-info:", video);
     }
-  
-   // console.log(this.videoList);  // Verifica que los datos sean correctos
   }
   
   
   
 
-
-    
-  onDragStart(event: DragEvent, video: any) {
-    event.dataTransfer?.setData("video/mp4", JSON.stringify({
-      file: video.file,    
-      name: video.name,
-      type: video.type,
-      url: video.url
-    }));
+  onDragStart(event: DragEvent, video?: any) {
+    if (video) {
+      // Si es un video de la lista
+      console.log("Iniciando arrastre de video desde la lista:", video);
+  
+      if (event.dataTransfer) {
+        event.dataTransfer.setData("video/info", JSON.stringify({
+          name: video.name,
+          type: video.type,
+          url: video.url
+        }));
+      }
+    }
   }
   
-
-
+  
 
   toNext() {
     if (this.tapActive < 3) {
