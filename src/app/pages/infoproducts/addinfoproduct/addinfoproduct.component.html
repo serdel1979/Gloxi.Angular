@@ -15,19 +15,19 @@
                 <form>
                     <div class="mb-3">
                         <label class="form-label">Título</label>
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control"  [(ngModel)]="formDataModel.titulo" [ngModelOptions]="{standalone: true}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Descripción</label>
-                        <textarea class="form-control" rows="3"></textarea>
+                        <textarea class="form-control" rows="3"  [(ngModel)]="formDataModel.descripcion" [ngModelOptions]="{standalone: true}"></textarea>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Precio</label>
-                        <input min="1" type="number" class="form-control">
+                        <input min="1" type="number" class="form-control"  [(ngModel)]="formDataModel.precio" [ngModelOptions]="{standalone: true}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Categoría</label>
-                        <select class="form-control">
+                        <select class="form-control"  [(ngModel)]="formDataModel.categoria" name="categoria" [ngModelOptions]="{standalone: true}">
                             <option value="electronica">Electrónica</option>
                             <option value="mecanica">Mecánica</option>
                             <option value="hogar">Electrónica</option>
@@ -43,13 +43,13 @@
         <div class="col-md-5">
             <ul class="nav nav-pills d-flex flex-wrap justify-content-center justify-content-md-start">
                 <li class="nav-item">
-                    <a class="nav-link active" #tab1 (click)="selectTap(1)">Listados</a>
+                    <a class="nav-link active" style="cursor: pointer;" #tab1 (click)="selectTap(1)">Listados</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" #tab2 (click)="selectTap(2)">Archivo</a>
+                    <a class="nav-link" style="cursor: pointer;" #tab2 (click)="selectTap(2)">Archivo</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" #tab3 (click)="selectTap(3)">Video</a>
+                    <a class="nav-link" style="cursor: pointer;" #tab3 (click)="selectTap(3)">Video</a>
                 </li>
               
             </ul>
@@ -59,7 +59,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Grupos actuales</h5>
                         <p class="card-text">Puede seleccionar a qué grupo pertenecerá el infoproducto.</p>
-                        <select class="form-select" size="5" aria-label="Seleccionar grupo">
+                        <select class="form-select" size="5" aria-label="Seleccionar grupo"  [(ngModel)]="formDataModel.grupoId" name="grupo">
                             <option selected>Seleccione un grupo</option>
                             <option value="1">Programación</option>
                             <option value="2">Seguridad</option>
@@ -80,7 +80,8 @@
                         
                         <div class="mb-3">
                             <label for="formFileDisabled" class="form-label">Disabled file input example</label>
-                            <input class="form-control" type="file" id="formFileDisabled">
+                            <input class="form-control" type="file" (change)="onArchivoSeleccionado($event)">
+
                           </div>
 
                         <a  class="btn btn-primary mt-2" style="color: white;"  (click)="toNext()">Siguiente</a>
@@ -107,7 +108,7 @@
                 <h4 class="mb-3">Listado de Videos</h4>
         
                 <!-- Botón para cargar videos desde la PC -->
-                <input type="file" accept="video/*" multiple (change)="onFileSelected($event)" class="form-control mb-3">
+                <input type="file" accept="video/*" (change)="onFileSelected($event)" class="form-control mb-3">
                 
         
                 <!-- Sección de Drag & Drop -->
@@ -116,22 +117,51 @@
                     (drop)="onDrop($event)">
                     Arrastra aquí el video grabado o súbelo desde tu PC
                 </div>
-        
+        <!--
                 <ul class="list-group">
                     <li class="list-group-item d-flex justify-content-between align-items-center" 
                         *ngFor="let video of videoList" draggable="true" 
                         (dragstart)="onDragStart($event, video)">
-                        
-                      <!-- Miniatura del video -->
+                     
                       <video [src]="video.url" controls class="w-100" (click)="playVideo(video)" 
                              style="max-width: 100px; max-height: 100px; object-fit: cover;">
                       </video>
                     </li>
                   </ul>
+                -->
+                
+                <ul class="list-group">
+                    <li class="list-group-item" *ngFor="let video of videoList" draggable="true" (dragstart)="onDragStart($event, video)">
+                      
+                      <div class="d-flex">
+                        <!-- Miniatura del video -->
+                        <video [src]="video.url" controls (click)="playVideo(video)" 
+                               style="max-width: 100px; max-height: 100px; object-fit: cover;">
+                        </video>
                   
+                        <!-- Info del video -->
+                        <div class="ms-3 flex-grow-1">
+                          <input type="text" class="form-control mb-2" [(ngModel)]="video.titulo" placeholder="Título del video">
+                          <textarea class="form-control" [(ngModel)]="video.descripcion" placeholder="Descripción"></textarea>
+                        </div>
+                  
+                        <!-- Botón para eliminar -->
+                        <button class="btn btn-danger ms-2" (click)="removeVideo(video)">
+                          <i class="fas fa-trash"></i>
+                        </button>
+                      </div>
+                  
+                    </li>
+                  </ul>
+                  
+
+
+
             </div>
         </div>
-        
+        <button class="btn btn-danger ms-2" (click)="enviarInfoproducto()">
+            <i class="fas fa-save"></i>
+          </button> 
         
     </div>
 </div>

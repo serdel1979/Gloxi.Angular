@@ -7,11 +7,13 @@ import {
 } from '@angular/core';
 import { InfoProductoComponent } from '../../../component/info-producto/info-producto.component';
 import { CommonModule } from '@angular/common';
+import { VideoItem } from '../../../interfaces/videItem';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-addinfoproduct',
   standalone: true,
-  imports: [InfoProductoComponent, CommonModule],
+  imports: [InfoProductoComponent, CommonModule, FormsModule],
   templateUrl: './addinfoproduct.component.html',
   styleUrl: './addinfoproduct.component.css',
 })
@@ -23,9 +25,21 @@ export class AddinfoproductComponent {
   tapActive = 1;
   mostrarFormulario = false;
 
+  formDataModel = {
+    titulo: '',
+    descripcion: '',
+    precio: 0,
+    categoria: '',
+    grupoId: '',
+    archivo: null as File | null,
+    videos: [] as VideoItem[]
+  };
+  
+
   constructor(private renderer: Renderer2) {}
 
-  videoList: any[] = [];
+ // videoList: any[] = [];
+  videoList: VideoItem[] = [];
 
   videos: { name: string; type: string; url: string }[] = [];
 
@@ -61,6 +75,7 @@ export class AddinfoproductComponent {
     videoElement.play();
   }
 
+  /*
   removeVideo(video: any) {
     // Revocar la URL antes de eliminar el video
     if (video.url) {
@@ -74,13 +89,49 @@ export class AddinfoproductComponent {
   onVideoGrabado(video: File) {
     this.videoList.push(video);
   }
+    */
+
+  removeVideo(video: VideoItem) {
+    if (video.url) {
+      URL.revokeObjectURL(video.url);
+    }
+  
+    this.videoList = this.videoList.filter((v) => v !== video);
+  }
+  
+
+
+
+
+  onArchivoSeleccionado(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.formDataModel.archivo = input.files[0];
+    }
+  }
+  
+
+
+  onVideoGrabado(video: File) {
+    const videoUrl = URL.createObjectURL(video);
+  
+    const videoItem: VideoItem = {
+      file: video,
+      name: video.name,
+      type: video.type,
+      url: videoUrl,
+    };
+  
+    this.videoList.push(videoItem);
+  }
+  
 
   // Drag & Drop
   onDragOver(event: DragEvent) {
     event.preventDefault();
   }
 
-  
+  /*
   onDrop(event: DragEvent) {
     event.preventDefault();
   
@@ -122,6 +173,57 @@ export class AddinfoproductComponent {
       console.log("Archivo agregado desde video-info:", video);
     }
   }
+  */
+
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+  
+    // Si se arrastra un archivo desde la PC
+    if (event.dataTransfer?.files.length) {
+      const file = event.dataTransfer.files[0];
+      const url = URL.createObjectURL(file);
+  
+      const videoItem: VideoItem = {
+        file,
+        name: file.name,
+        type: file.type,
+        url
+      };
+  
+      this.videoList.push(videoItem);
+      console.log("Archivo agregado desde la PC:", file);
+    }
+  
+    // Si se arrastra un video desde otro componente
+    const videoData = event.dataTransfer?.getData("video/mp4");
+    const videoInfo = event.dataTransfer?.getData("video/info");
+  
+    if (videoData) {
+      const video = JSON.parse(videoData);
+  
+      const videoItem: VideoItem = {
+        file: video.file ?? null, // Aseguramos compatibilidad
+        name: video.name,
+        type: video.type,
+        url: video.url
+      };
+  
+      this.videoList.push(videoItem);
+      console.log("Archivo agregado desde video-grabado.mp4:", video);
+    } else if (videoInfo) {
+      const video = JSON.parse(videoInfo);
+  
+      const videoItem: VideoItem = {
+        file: null,  // No tenemos acceso al archivo real
+        name: video.name,
+        type: video.type,
+        url: video.url
+      };
+  
+      this.videoList.push(videoItem);
+      console.log("Archivo agregado desde video-info:", video);
+    }
+  }
   
   
   
@@ -140,6 +242,112 @@ export class AddinfoproductComponent {
       }
     }
   }
+  
+
+  prepararFormularioParaEnvio(model: typeof this.formDataModel): FormData {
+    const formData = new FormData();
+  
+    formData.append('titulo', model.titulo);
+    formData.append('descripcion', model.descripcion);
+    formData.append('precio', model.precio.toString());
+    formData.append('categoria', model.categoria);
+    formData.append('grupoId', model.grupoId);
+  
+    if (model.archivo) {
+      formData.append('archivo', model.archivo, model.archivo.name);
+    }
+
+  
+    model.videos.forEach((video, index) => {
+      if (video.file instanceof File) {
+        formData.append(`videos[${index}]`, video.file, video.name);
+  
+        if (video.titulo) {
+          formData.append(`titulos[${index}]`, video.titulo);
+        }
+        if (video.descripcion) {
+          formData.append(`descripciones[${index}]`, video.descripcion);
+        }
+      }
+    });
+  
+    return formData;
+  }
+  
+
+  prepararVideosParaEnvio(videoList: VideoItem[]): FormData {
+    const formData = new FormData();
+  
+    videoList.forEach((video, index) => {
+      if (video.file instanceof File) {
+        // Agrega el archivo
+        formData.append(`videos[${index}]`, video.file, video.name);
+  
+        // Agrega los campos extra como título y descripción (opcional)
+        if (video.titulo) {
+          formData.append(`titulos[${index}]`, video.titulo);
+        }
+        if (video.descripcion) {
+          formData.append(`descripciones[${index}]`, video.descripcion);
+        }
+      } else {
+        console.warn(`El video "${video.name}" no tiene un archivo válido y no será enviado.`);
+      }
+    });
+
+  
+    return formData;
+  }
+
+
+  async convertirBlobsEnFiles(videoList: VideoItem[]): Promise<VideoItem[]> {
+    const resultados: VideoItem[] = [];
+  
+    for (const video of videoList) {
+      if (!(video.file instanceof File) && video.url.startsWith("blob:")) {
+        try {
+          const response = await fetch(video.url);
+          const blob = await response.blob();
+          const file = new File([blob], video.name, { type: video.type });
+  
+          resultados.push({
+            ...video,
+            file: file // Aquí se guarda el File generado correctamente
+          });
+        } catch (error) {
+          console.error("Error al convertir blob en file:", error);
+          resultados.push(video); // En caso de error, se conserva el original
+        }
+      } else {
+        resultados.push(video); // Ya es válido
+      }
+    }
+  
+    return resultados;
+  }
+  
+  
+  async enviarInfoproducto() {
+    this.formDataModel.videos = await this.convertirBlobsEnFiles(this.videoList);
+  
+    const formData = this.prepararFormularioParaEnvio(this.formDataModel);
+  
+    for (const [key, value] of (formData as any).entries()) {
+      if (value instanceof File) {
+        console.log(`${key}: [File] ${value.name}, ${value.size} bytes`);
+      } else {
+        console.log(`${key}: ${value}`);
+      }
+    }
+    console.log('Videos convertidos:', this.formDataModel.videos.map(v => ({
+      name: v.name,
+      isFile: v.file instanceof File,
+      size: v.file?.size
+    })));
+  }
+  
+  
+
   
   
 
