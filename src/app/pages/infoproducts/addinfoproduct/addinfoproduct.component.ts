@@ -9,6 +9,8 @@ import { InfoProductoComponent } from '../../../component/info-producto/info-pro
 import { CommonModule } from '@angular/common';
 import { VideoItem } from '../../../interfaces/videItem';
 import { FormsModule } from '@angular/forms';
+import { InfoproductService } from '../../../services/infoproduct.service';
+import { HttpEventType } from '@angular/common/http';
 
 @Component({
   selector: 'app-addinfoproduct',
@@ -36,7 +38,7 @@ export class AddinfoproductComponent {
   };
   
 
-  constructor(private renderer: Renderer2) {}
+  constructor(private renderer: Renderer2, private infoproductService: InfoproductService) {}
 
  // videoList: any[] = [];
   videoList: VideoItem[] = [];
@@ -329,22 +331,24 @@ export class AddinfoproductComponent {
   
   async enviarInfoproducto() {
     this.formDataModel.videos = await this.convertirBlobsEnFiles(this.videoList);
-  
     const formData = this.prepararFormularioParaEnvio(this.formDataModel);
   
-    for (const [key, value] of (formData as any).entries()) {
-      if (value instanceof File) {
-        console.log(`${key}: [File] ${value.name}, ${value.size} bytes`);
-      } else {
-        console.log(`${key}: ${value}`);
+    this.infoproductService.uploadInfoproduct(formData).subscribe({
+      next: (event) => {
+        if (event.type === HttpEventType.UploadProgress) {
+          const percentDone = Math.round((100 * event.loaded) / (event.total ?? 1));
+          console.log(`Progreso: ${percentDone}%`);
+        } else if (event.type === HttpEventType.Response) {
+          console.log('Respuesta del servidor:', event.body);
+          
+        }
+      },
+      error: (error) => {
+        console.error('Error al subir infoproducto:', error);
       }
-    }
-    console.log('Videos convertidos:', this.formDataModel.videos.map(v => ({
-      name: v.name,
-      isFile: v.file instanceof File,
-      size: v.file?.size
-    })));
+    });
   }
+  
   
   
 
