@@ -48,6 +48,10 @@ export class AddinfoproductComponent {
   selectedVideo: any = null;
   selectedVideoUrl: string = '';
 
+  uploadProgress: number = 0;
+  subiendo: boolean = false;
+
+
   onFileSelected(event: any) {
     const files = event.target.files;
     
@@ -330,6 +334,9 @@ export class AddinfoproductComponent {
   
   
   async enviarInfoproducto() {
+    this.uploadProgress = 0;
+    this.subiendo = true;
+
     this.formDataModel.videos = await this.convertirBlobsEnFiles(this.videoList);
     const formData = this.prepararFormularioParaEnvio(this.formDataModel);
   
@@ -337,14 +344,18 @@ export class AddinfoproductComponent {
       next: (event) => {
         if (event.type === HttpEventType.UploadProgress) {
           const percentDone = Math.round((100 * event.loaded) / (event.total ?? 1));
-          console.log(`Progreso: ${percentDone}%`);
+          this.uploadProgress = percentDone;
         } else if (event.type === HttpEventType.Response) {
-          console.log('Respuesta del servidor:', event.body);
+          alert("Infoproducto subido!!!");
+          this.subiendo = false;
+          this.uploadProgress = 100;
           
         }
       },
       error: (error) => {
-        console.error('Error al subir infoproducto:', error);
+        this.subiendo = false;
+        this.uploadProgress = 100;
+        console.log(error);
       }
     });
   }

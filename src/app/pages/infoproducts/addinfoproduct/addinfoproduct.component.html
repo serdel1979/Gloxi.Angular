@@ -1,4 +1,9 @@
 <div class="container m-0 p- m-md-4 p-md-3" style="margin-bottom: 20px;">
+    
+    
+
+      
+      
 
     <h3 class="text-left mb-4">Agregando un infoproducto</h3>
     <div class="row d-flex align-items-start">
@@ -34,7 +39,7 @@
                             <option value="informatica">Informática</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary w-100" style="color: white;">Guardar Producto</button>
+
                 </form>
             </div>
         </div>
@@ -159,9 +164,21 @@
 
             </div>
         </div>
-        <button class="btn btn-danger ms-2" (click)="enviarInfoproducto()">
+        <button class="btn btn-primary" style="color:white;" (click)="enviarInfoproducto()">
             <i class="fas fa-save"></i>
           </button> 
         
+          <div class="progress mt-2" *ngIf="subiendo">
+            <div
+              class="progress-bar progress-bar-striped progress-bar-animated"
+              role="progressbar"
+              [style.width.%]="uploadProgress"
+              [attr.aria-valuenow]="uploadProgress"
+              aria-valuemin="0"
+              aria-valuemax="100"
+            >
+              {{ uploadProgress }}%
+            </div>
+          </div>
     </div>
 </div>
