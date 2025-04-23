@@ -1,3 +1,5 @@
+/// <reference types="@angular/localize" />
+
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { AuthInterceptor } from './app/midleware/auth.interceptor';
 import { provideRouter, withHashLocation } from '@angular/router';
