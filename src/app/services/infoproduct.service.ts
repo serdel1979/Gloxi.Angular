@@ -23,6 +23,14 @@ export class InfoproductService {
     });
   }
   
+
+
+  getInfoproducts(page: number = 1, pageSize: number = 9) {
+    return this.http.get<any>(`${this.apiUrl}/list?page=${page}&pageSize=${pageSize}`);
+  }
+
+
+
   // uploadInfoproduct(formData: FormData): Observable<any> {
   //   const token = localStorage.getItem('authToken');
   //   const headers = new HttpHeaders({

@@ -36,11 +36,37 @@
                         <div class="card h-100">
                          <!--   <img src="https://via.placeholder.com/150" class="card-img-top" alt="Imagen ejemplo" /> -->
                             <div class="card-body">
-                                <h5 class="card-title">{{ info.titulo }}</h5>
+                                <h5 class="card-title">{{ info.title }}</h5>
                                 <div class="image-container">
-                                    <img src="{{info.imagen}}" class="card-img-top" alt="Imagen ejemplo" />
+                               
+                                    <div class="image-container position-relative"
+                                        (mouseenter)="info.showVideo = true"
+                                        (mouseleave)="info.showVideo = false">
+                                    
+                                    <!-- Imagen por defecto -->
+                                     @if(!info.showVideo){
+                                        <img 
+                                        [src]="info.thumbnailUrl"
+                                        class="card-img-top"
+                                        alt="{{ info.title }}" />
+                                     }
+
+
+                                    <!-- Video al hacer hover -->
+                                     @if(info.showVideo){
+                                        <video 
+                                            [src]="info.videoUrl"
+                                            autoplay
+                                            muted
+                                            loop
+                                            class="card-img-top">
+                                        </video>
+                                     }
+
+                                    </div>
+
                                 </div>
-                                <p class="card-text">{{ info.descripcion }}</p>
+                                <p class="card-text">{{ info.description }} - ${{ info.price }}</p>
                                 <a href="#" class="btn btn-primary">Ver más</a>
                             </div>
                         </div>
