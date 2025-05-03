@@ -9,4 +9,62 @@
                 Gloxi?</a>
         </div>
     </div>
+
+</div>
+<div class="text-center">
+    <!-- Contenedor principal con máximo ancho para limitar el tamaño global -->
+    <div class="container-fluid px-4" style="max-width: 1200px;">
+        <!-- Ajuste del espaciado entre cards con g-3 en lugar de g-4 -->
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-3 g-3 p-3">
+            @for (info of infoproductos; track info.id) {
+                <!-- Añadido una clase para personalizar el tamaño -->
+                <div class="col custom-card-container">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body p-3">
+                            <!-- Título más pequeño -->
+                            <h6 class="card-title">{{ info.title }}</h6>
+                            <div class="media-container mb-2">
+                                <!-- Altura reducida del contenedor multimedia -->
+                                <div class="fixed-media-box position-relative"
+                                    (mouseenter)="info.showVideo = true"
+                                    (mouseleave)="info.showVideo = false">
+                                
+                                    <!-- Imagen por defecto -->
+                                    @if(!info.showVideo){
+                                        <img 
+                                            [src]="info.thumbnailUrl || 'images/prof.gif'"
+                                            class="card-img-top media-element"
+                                            alt="{{ info.title }}" />
+                                    }
+
+                                    <!-- Video al hacer hover -->
+                                    @if(info.showVideo){
+                                        @if(info.videoUrl){
+                                            <video 
+                                                [src]="info.videoUrl"
+                                                autoplay
+                                                muted
+                                                loop
+                                                class="card-img-top media-element">
+                                            </video>
+                                        }
+                                        @else {
+                                            <img 
+                                                [src]="info.thumbnailUrl || 'images/prof.gif'"
+                                                class="card-img-top media-element"
+                                                alt="{{ info.title }}" />
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            <!-- Texto más pequeño -->
+                            <p class="card-text small">{{ info.description }} - ${{ info.price }}</p>
+                            <!-- Botón más pequeño -->
+                            <a href="#" class="btn btn-primary btn-sm" style="color: white;">Ver más</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
 </div>

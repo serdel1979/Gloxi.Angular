@@ -35,3 +35,24 @@
     object-fit: cover;
   }
   
+
+  .media-container {
+    width: 100%;
+    overflow: hidden;
+}
+
+.fixed-media-box {
+    width: 100%;
+    height: 200px; /* Ajusta esta altura según tus necesidades */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.media-element {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Esto hace que la imagen/video cubra el espacio manteniendo su proporción */
+    transition: all 0.3s ease;
+}

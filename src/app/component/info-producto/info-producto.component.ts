@@ -115,7 +115,6 @@ export class InfoProductoComponent {
         url: URL.createObjectURL(videoFile) // URL generada desde el Blob
       });
       event.dataTransfer?.setData("video/mp4", videoData);
-      console.log("Datos de video enviados en el arrastre:", videoData);
     }
   }
   

@@ -15,6 +15,8 @@ export class HomeComponent implements OnInit {
   
 
   infoproductos: any[] = [];
+
+  defaultImageUrl: string = 'assets/images/pizarron.png';
   
   constructor(private infoproductService: InfoproductService) {}
 

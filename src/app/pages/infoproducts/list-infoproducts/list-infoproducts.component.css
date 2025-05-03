@@ -1,0 +1,58 @@
+.sidebar-container {
+    height: 100%;
+  }
+  
+  .sidebar {
+    height: 100%;
+    min-height: 100vh;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);  
+  }
+  
+  /* Asegura que los cards tengan un tamaño máximo */
+  .card {
+    transition: all 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  
+  /* Contenedor multimedia */
+  .media-container {
+    width: 100%;
+    overflow: hidden;
+  }
+  
+  .fixed-media-box {
+    width: 100%;
+    height: 160px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+  
+  .media-element {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.3s ease;
+  }
+  
+  /* Responsive: ajustes para pantallas pequeñas */
+  @media (max-width: 767.98px) {
+    .sidebar {
+      min-height: auto;
+      position: relative;
+      margin-bottom: 1rem;
+    }
+    
+    .content-area {
+      padding: 1rem !important;
+    }
+    
+    .fixed-media-box {
+      height: 140px;
+    }
+  }
