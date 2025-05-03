@@ -5,9 +5,16 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <a [routerLink]="['/main']" style="cursor: pointer;">
-        <img src="/images/logo.png" width="120" alt="logo icon">
-      </a>
+      @if(isLoggedIn){
+        <a [routerLink]="['/main']" style="cursor: pointer;">
+          <img src="/images/logo.png" width="120" alt="logo icon">
+        </a>
+      }@else {
+        <a [routerLink]="['/infoproducts/list']" style="cursor: pointer;">
+          <img src="/images/logo.png" width="120" alt="logo icon">
+        </a>
+      }
+
       
 
    

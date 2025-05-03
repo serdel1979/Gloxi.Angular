@@ -12,8 +12,8 @@ import { Router } from '@angular/router';
 export class AuthService {
 //usersgloxideployment-production.up.railway.app
 
-  //private apiUrl = 'https://usersgloxideployment-production.up.railway.app/api/Auth';
-  private apiUrl = 'https://localhost:7052/api/Auth';
+  private apiUrl = 'https://usersgloxideployment-production.up.railway.app/api/Auth';
+  //private apiUrl = 'https://localhost:7052/api/Auth';
 
   private currentUserSubject = new BehaviorSubject<User | null>(
     this.getStoredUser()
