@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class InfoproductService {
 
   private apiUrl = 'https://usersgloxideployment-production.up.railway.app/api/Infoproduct';
-  //private apiUrl = 'https://localhost:7052/api/Infoproduct';
+ 
 
 
 
